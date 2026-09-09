@@ -77,10 +77,10 @@ const playbyhis = (url) => {};
 
 async function getSong(folder) {
   try {
-    const response = await fetch(`https://taimooraijaz.github.io/Songify-Player/song/${folder}/`);
+    const response = await fetch(`http://192.168.10.6:3000/song/${folder}/`);
 
     if (!response.ok) {
-      throw new Error(`HTTPS error: ${response.status}`);
+      throw new Error(`HTTP error: ${response.status}`);
     }
 
     const html = await response.text();
@@ -271,7 +271,7 @@ songhisList.addEventListener("click", (event) => {
 });
 
 async function displayCards() {
-  const response = await fetch("https://taimooraijaz.github.io/Songify-Player/song/");
+  const response = await fetch("http://192.168.10.6:3000/song/");
   if (!response.ok) {
     throw new Error(`HTTP error: ${response.status}`);
   }
