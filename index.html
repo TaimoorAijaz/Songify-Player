@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="img">
+    <link rel="preconnect" href="style.css">
+    <link rel="preconnect" href="app.js">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Web Media Player is a fast, responsive online media player
+        for audio smoothly across devices with an easy-to-use interface.">
+    <meta name="keywords" content="web media player, HTML5 media player,
+        audio player, browser media player, responsive media player, multimedia player">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <meta name="author" content="Taimoor Aijaz">
+    <title>Songify Player- Web Player: Music for everyone</title>
+</head>
+
+<body>
+    <main class="container">
+        <aside class="left">
+            <div class="home bg-grey">
+                <img onclick="toggleAside()" width="25" height="25" class="invert hambuger" src="img/hambuger.svg"
+                    alt="3 Dot icon">
+                <div>
+                    <p style="font-size: 20px; font-weight: bold;">Also This website cerate by Taimoor Aijaz</p>
+                </div>
+                <ul>
+                    <li onclick="callhis()" style="width: 150px;"><img fetchpriority="high" height="30" width="40"
+                            class="invert " src="img/home.svg" alt="History icon"
+                            style="width: 24px; height: 30px;">Your History</li>
+                    <li onclick="toggleSearch()"><img fetchpriority="high" height="30" width="40" class="invert "
+                            src="img/find.svg" alt="Find">Search</li>
+                </ul>
+            </div>
+
+            <div class="libary bg-grey">
+                <div class="heading">
+                    <img width="30" height="50" fetchpriority="high" class="invert" src="img/playlist.svg"
+                        alt="Play List icon">
+                    <h2>Album Songs</h2>
+                </div>
+                <div class="song-list">
+                    <ul></ul>
+                </div>
+                <footer class="footer">
+                    <div><a target="_blank" href="https://www.spotify.com/pk-en/legal/"><span>Legal</span></a></div>
+                    <div><a target="_blank" href="https://www.spotify.com/pk-en/safetyandprivacy/"><span>Privacy
+                                Center</span></a></div>
+                    <div><a target="_blank" href="https://www.spotify.com/pk-en/legal/privacy-policy/"><span>Privacy
+                                Policy</span></a>
+                    </div>
+                    <div><a target="_blank"
+                            href="https://www.spotify.com/pk-en/legal/cookies-policy/"><span>Cookies</span></a></div>
+                    <div><a target="_blank" href="https://www.spotify.com/pk-en/legal/privacy-policy/#s3"><span>About
+                                Ads</span></a>
+                    </div>
+                    <div><a target="_blank"
+                            href="https://www.spotify.com/pk-en/accessibility/"><span>Accessibility</span></a></div>
+                </footer>
+            </div>
+        </aside>
+
+        <section class="right bg-grey">
+            <header>
+                <nav>
+                    <div>
+                        <img fetchpriority="high" width="135" height="40" class="invert" src="img/logo.svg" alt="Logo">
+                    </div>
+                    <button onclick="togglelogin()" class="login-btn">Log in</button>
+                </nav>
+            </header>
+
+            <div class="spotify-playlist">
+                <h1>Songify Albums</h1>
+                <div class="card-container"></div>
+            </div>
+
+            <div class="playbar">
+                <div class="abc">
+                    <div class="shuffle">
+                        <img onclick="shuffle()" class="invert" height="25" width="25" src="img/non-shuffle.svg"
+                            alt="Shuffle icon">
+                    </div>
+                    <div class="song-btn invert">
+                        <img onclick="previous()" height="38" width="38" fetchpriority="high" id="previous"
+                            src="/img/pre.svg" alt="previous song">
+                        <img onclick="play()" height="38" width="38" fetchpriority="high" id="play" src="img/play.svg"
+                            alt="Play and pusce song">
+                        <img onclick="next()" height="38" width="38" fetchpriority="high" id="next" src="img/next.svg"
+                            alt="Next song">
+                    </div>
+                </div>
+                <div class="above-bar">
+                    <div class="song-info"></div>
+                    <div class="invert timevol">
+                        <img width="24" height="24" src="img/volume.svg" alt="Volume icon"><br>
+                        <input type="range" name="volume" min="0" max="100" value="100" id="volume"><br>
+                    </div>
+                    <div class="song-time"></div>
+                </div>
+                <div class="seekbar">
+                    <div>
+                        <div class="progress" id="progress"></div>
+                        <div class="thumb" id="thumb"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <article aria-labelledby="history-heading">
+        <div class="fc">
+            <h3>Your History</h3>
+            <button onclick="callhis()" type="button" aria-label="Close history">X</button>
+        </div>
+        <button onclick="clearSongHistory()" type="button">
+            Delete all
+            <img class="invert" width="24" height="20" src="img/delete.svg" alt="Delete history">
+        </button>
+        <div class="song-his-list">
+            <ul></ul>
+        </div>
+    </article>
+    <section id="login-section" aria-labelledby="login-heading">
+        <div>
+            <h4 id="login-heading">Log-in</h4>
+            <button onclick="togglelogin()" type="button"  aria-label="Close login">X</button>
+        </div>
+        <form id="login-form">
+            <label id="username-label" for="username-input">Enter Your Name</label>
+            <div>
+                <input type="text" name="username" id="username-input" autocomplete="username" placeholder="Enter Your Name" required>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="search hide"  aria-labelledby="search-heading">
+        <div class="searchh4">
+            <h4>Search Your Type Songs</h4>
+        </div><br>
+        <div class="searchdiv">
+            <input type="text" name="text" id="text" placeholder="What you want" aria-label="Search for songs">
+        </div>
+        <button type="button" onclick="toggleSearch()" aria-label="Close search">X</button>
+    </section>
+    <div id="message" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+</body>
+
+</html>
