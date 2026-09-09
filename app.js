@@ -271,7 +271,7 @@ songhisList.addEventListener("click", (event) => {
 });
 
 async function displayCards() {
-  const response = await fetch("http://192.168.10.6:3000/song/");
+  const response = await fetch("https://192.168.10.6:3000/song/");
   if (!response.ok) {
     throw new Error(`HTTP error: ${response.status}`);
   }
