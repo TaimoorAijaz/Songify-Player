@@ -77,10 +77,10 @@ const playbyhis = (url) => {};
 
 async function getSong(folder) {
   try {
-    const response = await fetch(`http://192.168.10.6:3000/song/${folder}/`);
+    const response = await fetch(`https://192.168.10.6:3000/song/${folder}/`);
 
     if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`);
+      throw new Error(`HTTPS error: ${response.status}`);
     }
 
     const html = await response.text();
