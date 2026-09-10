@@ -150,108 +150,12 @@
     "image": "song-Image/coke.jpg",
     "songs": [
       {
-        "name": "Aayi Aayi",
-        "url": "songs/coke/Aayi Aayi.mp3"
-      },
-      {
-        "name": "hina ki khushbu",
-        "url": "songs/coke/hina ki khushbu.mp3"
-      },
-      {
-        "name": "man aamadeh am",
-        "url": "songs/coke/man aamadeh am.mp3"
-      },
-      {
-        "name": "sammi-meri-waar",
-        "url": "songs/coke/sammi-meri-waar.mp3"
-      },
-      {
-        "name": "Tu-Hi-Tu",
-        "url": "songs/coke/Tu-Hi-Tu.mp3"
-      },
-      {
-        "name": "rangeela",
-        "url": "songs/coke/rangeela.mp3"
-      },
-      {
-        "name": "afreen afreen",
-        "url": "songs/coke/afreen afreen.mp3"
-      },
-      {
-        "name": "rockstar",
-        "url": "songs/coke/rockstar.mp3"
-      },
-      {
-        "name": "shakar wandaan-re-asrar",
-        "url": "songs/coke/shakar wandaan-re-asrar.mp3"
-      },
-      {
-        "name": "tajdar-e-haram",
-        "url": "songs/coke/tajdar-e-haram.mp3"
-      },
-      {
         "name": "uddi-ja",
         "url": "songs/coke/uddi-ja.mp3"
       },
       {
         "name": "washmallay",
         "url": "songs/coke/washmallay.mp3"
-      },
-      {
-        "name": "Baazi",
-        "url": "songs/coke/Baazi.mp3"
-      },
-      {
-        "name": "Blockbuster",
-        "url": "songs/coke/Blockbuster.mp3"
-      },
-      {
-        "name": "channa",
-        "url": "songs/coke/channa.mp3"
-      },
-      {
-        "name": "Jaan-E-Bahaaraan",
-        "url": "songs/coke/Jaan-E-Bahaaraan.mp3"
-      },
-      {
-        "name": "Julie",
-        "url": "songs/coke/Julie.mp3"
-      },
-      {
-        "name": "Kaatay-Na-Katay",
-        "url": "songs/coke/Kaatay-Na-Katay.mp3"
-      },
-      {
-        "name": "Laal-Meri",
-        "url": "songs/coke/Laal-Meri.mp3"
-      },
-      {
-        "name": "Latthay-Di-Chaadar",
-        "url": "songs/coke/Latthay-Di-Chaadar.mp3"
-      },
-      {
-        "name": "Mujh-Se-Pehli-Si",
-        "url": "songs/coke/Mujh-Se-Pehli-Si.mp3"
-      },
-      {
-        "name": "Muntazir",
-        "url": "songs/coke/Muntazir.mp3"
-      },
-      {
-        "name": "Naina-Moray",
-        "url": "songs/coke/Naina-Moray.mp3"
-      },
-      {
-        "name": "Rangrez",
-        "url": "songs/coke/Rangrez.mp3"
-      },
-      {
-        "name": "Ranjish",
-        "url": "songs/coke/Ranjish.mp3"
-      },
-      {
-        "name": "Tinak-Dhin.mp3",
-        "url": "songs/coke/Tinak-Dhin.mp3"
       }
     ]
   },
