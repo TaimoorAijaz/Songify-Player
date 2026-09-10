@@ -2,6 +2,7 @@ const cursong = new Audio();
 
 let songs = [];
 let songname = [];
+let musicData = [];
 let currentSongIndex = 0;
 
 const $ = (selector) => document.querySelector(selector);
@@ -73,40 +74,47 @@ async function playMusic(index) {
   }
 }
 
-const playbyhis = (url) => {};
-
-async function getSong(folder) {
+async function loadMusicData() {
   try {
-    const response = await fetch(`http://192.168.10.6:3000/song/${folder}/`);
-
+    const response = await fetch("./songs.json");
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
-
-    const html = await response.text();
-
-    const div = document.createElement("div");
-    div.innerHTML = html;
-
-    const links = div.querySelectorAll("a");
-
-    songs = [];
-    songname = [];
-
-    links.forEach((link) => {
-      if (link.href.endsWith(".mp3")) {
-        songs.push(link.href);
-        songname.push(link.textContent.trim());
-      }
-    });
-
-    renderSongList(songname);
-
-    return songs;
+    musicData = await response.json();
+    return musicData;
   } catch (error) {
-    console.error("Failed to load songs:", error);
+    console.error("Failed to load songs.json:", error);
     return [];
   }
+}
+
+function getSong(cardId) {
+  const card = musicData.find(
+    item => String(item.id) === String(cardId)
+  );
+
+  if (!card) {
+    console.error("Card not found:", cardId);
+    songs = [];
+    songname = [];
+    renderSongList([]);
+    return [];
+  }
+
+  if (!Array.isArray(card.songs)) {
+    console.error("Songs array missing for card:", card);
+    songs = [];
+    songname = [];
+    renderSongList([]);
+    return [];
+  }
+
+  songs = card.songs.map(song => song.url);
+  songname = card.songs.map(song => song.name);
+
+  renderSongList(songname);
+
+  return songs;
 }
 
 function renderSongList(songs, indexes = null) {
@@ -143,23 +151,23 @@ function renderSongList(songs, indexes = null) {
 }
 
 let savehis = JSON.parse(localStorage.getItem("savehis")) || [];
-function renderSongHisList(p) {
-  let index = songname.indexOf(p);
+function renderSongHisList(index) {
   if (index === -1 || !songs[index]) {
     return;
   }
-  let songurl = songs[index];
-  let song = songname[index];
-  let existingSong = Array.from(songhisList.querySelectorAll("li")).find(
-    (li) => li.dataset.url === songurl,
-  );
+  const songurl = songs[index];
+  const song = songname[index];
+
+  let existingSong = Array.from(
+    songhisList.querySelectorAll("li")
+  ).find((li) => li.dataset.url === songurl);
 
   if (existingSong) {
     existingSong.remove();
   }
 
   songhisList.insertAdjacentHTML(
-    "beforeend",
+    "afterbegin",
     `<li data-url="${songurl}">
       <img class="invert"
         width="30"
@@ -171,12 +179,15 @@ function renderSongHisList(p) {
         <div>${song}</div>
         <div>Artist Undefined</div>
       </div>
-      <img class="invert delete-his"
-        width="24"
-        height="20"
-        src="img/delete.svg"
-        alt="delete icon"
-      >
+      <div class="delete-his">
+        <img
+          class="invert"
+          width="24"
+          height="20"
+          src="img/delete.svg"
+          alt="delete"
+        >
+      </div>
       <div class="his-play-now">
         <img
           class="invert"
@@ -186,15 +197,10 @@ function renderSongHisList(p) {
           alt="Play song"
         >
       </div>
-    </li>`,
+    </li>`
   );
 
-  let existingHistory = savehis.find((item) => item.url === songurl);
-
-  if (existingHistory) {
-    savehis = savehis.filter((item) => item.url !== songurl);
-  }
-
+  savehis = savehis.filter((item) => item.url !== songurl);
   savehis.unshift({
     name: song,
     url: songurl,
@@ -205,7 +211,7 @@ function renderSongHisList(p) {
 if (savehis.length >= 1) {
   savehis.forEach((e) => {
     songhisList.insertAdjacentHTML(
-      "afterbegin",
+      "beforeend",
       `<li data-url="${e.url}">
       <img class="invert"
         width="30"
@@ -270,99 +276,61 @@ songhisList.addEventListener("click", (event) => {
   localStorage.setItem("savehis", JSON.stringify(savehis));
 });
 
-async function displayCards() {
-  const response = await fetch("http://192.168.10.6:3000/song/");
-  if (!response.ok) {
-    throw new Error(`HTTP error: ${response.status}`);
-  }
-  const html = await response.text();
-  const div = document.createElement("div");
-  div.innerHTML = html;
-  const links = [...div.querySelectorAll("a")];
-
-  const folders = links
-    .filter((link) => link.href.includes("/%5Csong%5C"))
-    .map((link) => {
-      const folder = link.href.split("/%5Csong%5C")[1];
-
-      return folder;
-    });
-
-  // Fetch all info.json files simultaneously
-  const cards = await Promise.all(
-    folders.map(async (folder) => {
-      const response = await fetch(
-        `http://192.168.10.6:3000/song/${folder}info.json`,
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to load info");
-      }
-
-      const info = await response.json();
-
-      return {
-        folder,
-        ...info,
-      };
-    }),
-  );
-
-  cardContainer.innerHTML = cards
-    .filter(Boolean)
-    .map(
-      ({ folder, title, descreption }) => `
-          <div
-            data-folder="${folder.replace("/", "")}"
-            class="card"
-          >
-            <div class="play">
-              <div>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="black"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8 5.5V18.5C8 19.5 9.1 20.1 9.9 19.5L19.2
-                    12.9C19.9 12.4 19.9 11.6 19.2 11.1L9.9 4.5
-                    C9.1 3.9 8 4.5 8 5.5Z"
-                  />
-                </svg>
-              </div>
-            </div>
-            <img
-              width="180"
-              height="180"
-              decoding="async"
-              fetchpriority= "high"
-              src="/song/${folder}cover.jpg"
-              alt="${title || "Song cover"}"
+function displayCards() {
+  cardContainer.innerHTML = musicData
+    .map(card => `
+      <div
+        data-id="${card.id}"
+        class="card"
+      >
+        <div class="play">
+          <div>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="black"
+              xmlns="http://www.w3.org/2000/svg"
             >
-            <h2>${title || "Unknown"}</h2>
-            <p>${descreption || ""}</p>
-
+              <path
+                d="M8 5.5V18.5C8 19.5 9.1 20.1 9.9 19.5L19.2
+                12.9C19.9 12.4 19.9 11.6 19.2 11.1L9.9 4.5
+                C9.1 3.9 8 4.5 8 5.5Z"
+              />
+            </svg>
           </div>
-        `,
-    )
+        </div>
+
+        <img
+          width="180"
+          height="180"
+          decoding="async"
+          fetchpriority="high"
+          src="${card.image}"
+          alt="${card.title || "Song cover"}"
+        >
+
+        <h2>${card.title || "Unknown"}</h2>
+
+        <p>${card.description || ""}</p>
+      </div>
+    `)
     .join("");
 }
 
-cardContainer.addEventListener("click", async (event) => {
+cardContainer.addEventListener("click", (event) => {
   const card = event.target.closest(".card");
   if (!card) return;
-  const folder = card.dataset.folder;
-  const newSongs = await getSong(folder);
+  const cardId = card.dataset.id;
+  const newSongs = getSong(cardId);
   if (newSongs.length > 0) {
     currentSongIndex = 0;
     cursong.src = songs[0];
     songInfo.textContent = songname[0] || "Unknown";
     songTime.textContent = "00:00 / 00:00";
   }
-  showMessage("Songs is load in Sidebar / album songs");
-  localStorage.setItem("folder", JSON.stringify(folder));
+  localStorage.setItem("cardId", cardId);
+  showMessage("Songs loaded in Sidebar / album songs");
   updatePlayButton(false);
 });
 
@@ -425,7 +393,7 @@ const next = () => {
 };
 
 cursong.addEventListener("ended", () => {
-  renderSongHisList(songname[currentSongIndex]);
+  renderSongHisList(currentSongIndex);
   if (shufflevalue === "non-shuffle") {
     if (currentSongIndex < songs.length - 1) {
       playMusic(currentSongIndex + 1);
@@ -453,19 +421,23 @@ function updateVolume() {
 volume.addEventListener("input", (event) => {
   cursong.volume = Number(event.target.value) / 100;
   updateVolume();
-});
+});  
 
 async function main() {
-  await getSong(JSON.parse(localStorage.getItem("folder")) || "phonk");
+  await loadMusicData();
+  displayCards();
+  const savedCardId = localStorage.getItem("cardId");
+  if (savedCardId) {
+    getSong(savedCardId);
+  } else if (musicData.length > 0) {
+    getSong(musicData[0].id);
+  }
   if (songs.length > 0) {
     cursong.src = songs[0];
     songInfo.textContent = songname[0] || "Unknown";
     songTime.textContent = "00:00 / 00:00";
   }
-
-  await displayCards();
 }
-
 main();
 
 let asideValue = "hide";
